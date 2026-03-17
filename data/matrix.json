@@ -1,5 +1,33 @@
 {
   "_app": "SAP RICEFW Matrix",
   "_version": "1.0",
-  "reqs": []
+  "publishedAt": "2026-03-17T16:57:44.400Z",
+  "publishedBy": "angelalejosgbm",
+  "reqs": [
+    {
+      "id": "Fi-001",
+      "modulo": "FI",
+      "submodulo": "",
+      "proceso": "",
+      "ricefw": "",
+      "complejidad": "Media",
+      "titulo": "para safsafsa",
+      "descripcion": "",
+      "tipo_req": "",
+      "status": "Nuevo",
+      "prioridad": "",
+      "sprint": "",
+      "responsable": "No Asignado",
+      "status_abap": "No Iniciado",
+      "status_func": "No Iniciado",
+      "avance": "0",
+      "dias_est": "0",
+      "dias_real": "0",
+      "fecha_inicio": "",
+      "fecha_entrega": "",
+      "hecho": "No",
+      "condicion": "",
+      "notas": ""
+    }
+  ]
 }
