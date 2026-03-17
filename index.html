@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SAP RICEFW — Matriz de Requerimientos</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;
+  --sap-blue:#0070f2;--sap-teal:#00d4aa;--sap-gold:#f5a623;
+  --sap-red:#e74c3c;--sap-green:#27ae60;--sap-purple:#9b59b6;
+  --hdr-h:68px;--toolbar-h:52px;
+}
+[data-theme="dark"]{
+  --bg:#04091a;--surface:#0a1628;--surface2:#0f1f3a;
+  --border:rgba(0,112,242,.22);--text:#e8f0fe;--text-dim:#7a9cc5;
+  --divider:rgba(255,255,255,.05);--hover:rgba(0,112,242,.1);
+  --inset:rgba(0,0,0,.2);--track:rgba(255,255,255,.06);
+  --scrollbar:rgba(0,112,242,.45);
+  --hdr-bg:linear-gradient(135deg,#032d60 0%,#071a3e 60%,#032d60 100%);
+  --hdr-border:rgba(0,112,242,.25);--hdr-shadow:0 4px 32px rgba(0,112,242,.15);
+  --badge-bg:#0070f2;--badge-text:#fff;--badge-border:rgba(255,255,255,.15);
+  --ghost-bg:rgba(255,255,255,.07);--ghost-border:rgba(255,255,255,.15);--ghost-text:#cce4ff;
+  --sep:rgba(255,255,255,.13);
+  --toolbar-bg:#071022;--toolbar-border:rgba(0,112,242,.18);
+  --modal-overlay:rgba(0,0,0,.85);
+  --row-alt:rgba(0,112,242,.03);--row-hover:rgba(0,112,242,.07);
+  --shadow:none;
+  --toast-bg:#071a3e;--toast-border:rgba(0,212,170,.4);--toast-color:#00d4aa;
+}
+[data-theme="light"]{
+  --bg:#f0f4fa;--surface:#ffffff;--surface2:#edf1f8;
+  --border:rgba(0,90,200,.14);--text:#0d1f35;--text-dim:#4a6380;
+  --divider:rgba(0,0,0,.06);--hover:rgba(0,100,220,.06);
+  --inset:rgba(0,0,0,.03);--track:rgba(0,0,0,.07);
+  --scrollbar:rgba(0,100,200,.2);
+  --hdr-bg:linear-gradient(135deg,#1249a0 0%,#1a5dc8 55%,#1249a0 100%);
+  --hdr-border:rgba(255,255,255,.2);--hdr-shadow:0 3px 20px rgba(0,50,140,.2);
+  --badge-bg:#fff;--badge-text:#1249a0;--badge-border:rgba(18,73,160,.25);
+  --ghost-bg:rgba(255,255,255,.15);--ghost-border:rgba(255,255,255,.3);--ghost-text:#fff;
+  --sep:rgba(255,255,255,.25);
+  --toolbar-bg:#e8edf6;--toolbar-border:rgba(0,90,200,.12);
+  --modal-overlay:rgba(0,0,0,.55);
+  --row-alt:rgba(0,100,220,.025);--row-hover:rgba(0,100,220,.06);
+  --shadow:0 1px 3px rgba(0,0,0,.07);
+  --toast-bg:#eff6ff;--toast-border:rgba(0,100,220,.28);--toast-color:#0050c8;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-height:100vh;overflow-x:clip;transition:background .3s,color .3s;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,112,242,.04)1px,transparent 1px),linear-gradient(90deg,rgba(0,112,242,.04)1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+[data-theme="light"]::before{background-image:linear-gradient(rgba(0,112,242,.03)1px,transparent 1px),linear-gradient(90deg,rgba(0,112,242,.03)1px,transparent 1px);}
+
+/* ── HEADER ── */
+header{position:sticky;top:0;z-index:50;background:var(--hdr-bg);border-bottom:1px solid var(--hdr-border);padding:0 20px;display:flex;align-items:center;justify-content:space-between;height:var(--hdr-h);box-shadow:var(--hdr-shadow);flex-shrink:0;transition:background .3s;}
+.logo-area{display:flex;align-items:center;gap:14px;}
+.sap-badge{background:var(--badge-bg);color:var(--badge-text);font-family:var(--font-head);font-weight:800;font-size:17px;padding:4px 11px;border-radius:4px;letter-spacing:1px;border:1px solid var(--badge-border);}
+.logo-title{font-family:var(--font-head);font-size:16px;font-weight:700;color:#fff;}
+.logo-sub{font-size:9px;color:rgba(255,255,255,.65);text-transform:uppercase;letter-spacing:2px;}
+.hdr-actions{display:flex;gap:6px;align-items:center;flex-wrap:nowrap;}
+.hbtn{font-family:var(--font-body);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;border:none;display:flex;align-items:center;gap:5px;white-space:nowrap;transition:all .2s;}
+.hbtn-blue{background:var(--sap-blue);color:#fff;}.hbtn-blue:hover{background:#0058c7;}
+.hbtn-green{background:rgba(39,174,96,.13);border:1px solid rgba(39,174,96,.4);color:#27ae60;}.hbtn-green:hover{background:rgba(39,174,96,.22);}
+.hbtn-teal{background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.35);color:#00d4aa;}.hbtn-teal:hover{background:rgba(0,212,170,.2);}
+.hbtn-gold{background:rgba(245,166,35,.1);border:1px solid rgba(245,166,35,.35);color:#f5a623;}.hbtn-gold:hover{background:rgba(245,166,35,.2);}
+.hbtn-red{background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.35);color:#e74c3c;}.hbtn-red:hover{background:rgba(231,76,60,.2);}
+.hbtn-ghost{background:var(--ghost-bg);border:1px solid var(--ghost-border);color:var(--ghost-text);}.hbtn-ghost:hover{filter:brightness(1.12);}
+.hdr-sep{width:1px;height:24px;background:var(--sep);margin:0 2px;}
+
+/* ── TOOLBAR ── */
+.toolbar{position:sticky;top:var(--hdr-h);z-index:40;background:var(--toolbar-bg);border-bottom:1px solid var(--toolbar-border);padding:0 20px;height:var(--toolbar-h);display:flex;align-items:center;gap:10px;flex-wrap:nowrap;transition:background .3s;}
+.search-wrap{position:relative;flex:1;max-width:280px;}
+.search-wrap input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-family:var(--font-body);font-size:12px;padding:6px 10px 6px 30px;outline:none;transition:border-color .2s;}
+.search-wrap input:focus{border-color:var(--sap-blue);}
+.search-icon{position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:12px;color:var(--text-dim);pointer-events:none;}
+.filter-select{background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-family:var(--font-body);font-size:11px;padding:5px 24px 5px 9px;outline:none;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237a9cc5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;}
+[data-theme="light"] .filter-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%234a6380' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");}
+.filter-select option{background:var(--surface);color:var(--text);}
+.toolbar-sep{width:1px;height:28px;background:var(--divider);}
+.stats-pill{display:flex;align-items:center;gap:5px;background:var(--surface2);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:10px;color:var(--text-dim);}
+.stats-pill span{color:var(--sap-blue);font-weight:700;font-family:var(--font-head);}
+
+/* ── TABLE CONTAINER ── */
+.table-container{position:relative;z-index:1;overflow:auto;height:calc(100vh - var(--hdr-h) - var(--toolbar-h));padding-bottom:80px;}
+.table-container::-webkit-scrollbar{width:5px;height:5px;}
+.table-container::-webkit-scrollbar-thumb{background:var(--scrollbar);border-radius:3px;}
+
+/* ── TABLE ── */
+table{border-collapse:collapse;width:max-content;min-width:100%;font-size:11.5px;}
+thead{position:sticky;top:0;z-index:30;}
+thead th{background:var(--surface2);border-bottom:2px solid var(--border);border-right:1px solid var(--divider);padding:8px 10px;white-space:nowrap;font-family:var(--font-head);font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-dim);text-align:left;user-select:none;cursor:pointer;transition:background .15s;}
+thead th:hover{background:var(--hover);color:var(--text);}
+thead th.sorted-asc::after{content:' ↑';color:var(--sap-blue);}
+thead th.sorted-desc::after{content:' ↓';color:var(--sap-blue);}
+thead th:first-child{position:sticky;left:0;z-index:31;background:var(--surface2);}
+thead th:last-child{border-right:none;}
+
+tbody tr{border-bottom:1px solid var(--divider);transition:background .1s;cursor:pointer;}
+tbody tr:nth-child(even){background:var(--row-alt);}
+tbody tr:hover{background:var(--row-hover);}
+tbody td{padding:7px 10px;vertical-align:middle;border-right:1px solid var(--divider);color:var(--text);max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+tbody td:first-child{position:sticky;left:0;z-index:5;background:inherit;}
+tbody td:last-child{border-right:none;}
+tbody tr:hover td:first-child{background:var(--row-hover);}
+
+/* ── COLUMN WIDTHS ── */
+.col-actions{width:80px;min-width:80px;text-align:center;}
+.col-id{min-width:100px;}
+.col-modulo{min-width:70px;}
+.col-sub{min-width:120px;}
+.col-tipo{min-width:80px;}
+.col-ricefw{min-width:110px;}
+.col-titulo{min-width:200px;max-width:220px;}
+.col-desc{min-width:240px;max-width:260px;}
+.col-status{min-width:110px;}
+.col-complejidad{min-width:100px;}
+.col-prioridad{min-width:85px;}
+.col-responsable{min-width:120px;}
+.col-sprint{min-width:75px;}
+.col-avance{min-width:90px;}
+.col-fecha{min-width:100px;}
+.col-dias{min-width:80px;}
+.col-hecho{min-width:70px;}
+.col-notas{min-width:160px;max-width:200px;}
+
+/* ── BADGES / CHIPS ── */
+.badge{display:inline-flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:10px;letter-spacing:.3px;white-space:nowrap;}
+.badge-R{background:rgba(0,112,242,.15);color:#0070f2;border:1px solid rgba(0,112,242,.3);}
+.badge-I{background:rgba(0,212,170,.15);color:#00a886;border:1px solid rgba(0,212,170,.3);}
+.badge-C{background:rgba(245,166,35,.15);color:#c07800;border:1px solid rgba(245,166,35,.3);}
+.badge-E{background:rgba(155,89,182,.15);color:#8e44ad;border:1px solid rgba(155,89,182,.3);}
+.badge-F{background:rgba(39,174,96,.15);color:#1a8a47;border:1px solid rgba(39,174,96,.3);}
+.badge-W{background:rgba(231,76,60,.15);color:#c0392b;border:1px solid rgba(231,76,60,.3);}
+.badge-P{background:rgba(52,152,219,.15);color:#2980b9;border:1px solid rgba(52,152,219,.3);}
+.badge-CI{background:rgba(149,165,166,.15);color:#7f8c8d;border:1px solid rgba(149,165,166,.3);}
+.badge-baja{background:rgba(39,174,96,.12);color:#1a8a47;}
+.badge-media{background:rgba(245,166,35,.12);color:#c07800;}
+.badge-alta{background:rgba(231,76,60,.12);color:#c0392b;}
+.badge-nuevo{background:rgba(0,212,170,.12);color:#00a886;}
+.badge-en-desarrollo{background:rgba(245,166,35,.12);color:#c07800;}
+.badge-en-pruebas{background:rgba(155,89,182,.12);color:#8e44ad;}
+.badge-listo{background:rgba(39,174,96,.12);color:#1a8a47;}
+.badge-hecho{background:rgba(39,174,96,.2);color:#1a8a47;}
+.badge-cancelado{background:rgba(149,165,166,.12);color:#7f8c8d;}
+.badge-no-iniciado{background:rgba(149,165,166,.1);color:var(--text-dim);}
+.badge-pi{background:rgba(52,152,219,.12);color:#2980b9;}
+
+/* ── PROGRESS BAR ── */
+.prog-bar{display:flex;align-items:center;gap:5px;}
+.prog-track{flex:1;height:4px;background:var(--track);border-radius:2px;overflow:hidden;min-width:45px;}
+.prog-fill{height:100%;border-radius:2px;transition:width .3s;}
+.prog-label{font-size:9px;color:var(--text-dim);min-width:25px;text-align:right;}
+
+/* ── ACTIONS ── */
+.row-actions{display:flex;gap:4px;justify-content:center;}
+.act-btn{background:none;border:none;cursor:pointer;font-size:13px;padding:3px 4px;border-radius:4px;transition:background .15s;color:var(--text-dim);}
+.act-btn:hover{background:var(--hover);color:var(--text);}
+.act-btn.danger:hover{background:rgba(231,76,60,.15);color:#e74c3c;}
+
+/* ── FAB ── */
+.fab{position:fixed;bottom:28px;right:28px;z-index:100;width:52px;height:52px;border-radius:50%;background:var(--sap-blue);color:#fff;font-size:24px;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(0,112,242,.4);display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.fab:hover{background:#0058c7;transform:scale(1.07);box-shadow:0 6px 28px rgba(0,112,242,.5);}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:var(--modal-overlay);z-index:200;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--surface);border:1px solid var(--border);border-radius:14px;width:100%;max-width:780px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.5);flex-shrink:0;}
+.modal-header{background:var(--surface2);border-bottom:1px solid var(--border);padding:16px 22px;display:flex;align-items:center;gap:10px;}
+.modal-header .modal-icon{width:32px;height:32px;background:rgba(0,112,242,.15);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.modal-title{font-family:var(--font-head);font-size:14px;font-weight:700;color:var(--text);flex:1;}
+.modal-close{background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:18px;padding:4px;border-radius:4px;transition:all .15s;line-height:1;}
+.modal-close:hover{color:var(--sap-red);background:rgba(231,76,60,.1);}
+.modal-body{padding:22px;display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.modal-body.single{grid-template-columns:1fr;}
+.modal-body .full-row{grid-column:1/-1;}
+.field-group{display:flex;flex-direction:column;gap:5px;}
+.field-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-dim);}
+.field-label .req{color:var(--sap-red);}
+.field-input,.field-select,.field-textarea{background:var(--surface2);border:1px solid var(--border);border-radius:7px;color:var(--text);font-family:var(--font-body);font-size:12px;padding:8px 11px;outline:none;transition:border-color .2s;width:100%;}
+.field-input:focus,.field-select:focus,.field-textarea:focus{border-color:var(--sap-blue);}
+.field-textarea{resize:vertical;min-height:80px;}
+.field-select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%237a9cc5' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 9px center;padding-right:26px;}
+[data-theme="light"] .field-select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='7'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%234a6380' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");}
+.field-select option{background:var(--surface);color:var(--text);}
+.modal-footer{padding:14px 22px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;background:var(--surface2);}
+.btn-primary{background:var(--sap-blue);border:none;color:#fff;font-family:var(--font-body);font-size:12px;font-weight:500;padding:9px 20px;border-radius:7px;cursor:pointer;transition:background .2s;}
+.btn-primary:hover{background:#0058c7;}
+.btn-cancel{background:var(--surface);border:1px solid var(--border);color:var(--text-dim);font-family:var(--font-body);font-size:12px;padding:9px 16px;border-radius:7px;cursor:pointer;transition:all .2s;}
+.btn-cancel:hover{border-color:rgba(231,76,60,.4);color:var(--sap-red);}
+
+/* ── CONFIRM DIALOG ── */
+.confirm-box{background:var(--surface);border:1px solid rgba(231,76,60,.3);border-radius:12px;width:100%;max-width:400px;padding:26px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4);}
+.confirm-title{font-family:var(--font-head);font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;}
+.confirm-msg{font-size:12px;color:var(--text-dim);margin-bottom:20px;line-height:1.6;}
+.confirm-actions{display:flex;gap:8px;justify-content:center;}
+.btn-danger{background:var(--sap-red);border:none;color:#fff;font-family:var(--font-body);font-size:12px;padding:9px 20px;border-radius:7px;cursor:pointer;transition:background .2s;}
+.btn-danger:hover{background:#a93226;}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--toast-bg);border:1px solid var(--toast-border);color:var(--toast-color);font-family:var(--font-body);font-size:12px;padding:9px 20px;border-radius:9px;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.45);pointer-events:none;opacity:0;transition:opacity .3s;white-space:nowrap;}
+
+/* ── EMPTY STATE ── */
+.empty-state{padding:60px 20px;text-align:center;color:var(--text-dim);}
+.empty-state .icon{font-size:40px;margin-bottom:12px;opacity:.5;}
+.empty-state .msg{font-family:var(--font-head);font-size:13px;font-weight:600;}
+.empty-state .sub{font-size:11px;margin-top:6px;opacity:.7;}
+
+/* ── DESVIATION INDICATOR ── */
+.desvio{font-size:10px;font-weight:700;padding:1px 5px;border-radius:4px;}
+.desvio.pos{color:#c0392b;background:rgba(231,76,60,.1);}
+.desvio.neg{color:#1a8a47;background:rgba(39,174,96,.1);}
+.desvio.ok{color:var(--text-dim);}
+
+/* ── KPI BAR ── */
+.kpi-bar{display:flex;gap:10px;padding:0 20px;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;flex-shrink:0;}
+.kpi-bar::-webkit-scrollbar{height:3px;}
+.kpi-bar::-webkit-scrollbar-thumb{background:var(--scrollbar);border-radius:2px;}
+.kpi-item{display:flex;flex-direction:column;align-items:center;padding:8px 14px;border-right:1px solid var(--divider);flex-shrink:0;min-width:90px;}
+.kpi-item:last-child{border-right:none;}
+.kpi-val{font-family:var(--font-head);font-size:20px;font-weight:800;line-height:1;}
+.kpi-lbl{font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:var(--text-dim);margin-top:2px;}
+
+/* ── COLUMN VISIBILITY PANEL ── */
+.col-panel{position:absolute;right:20px;top:calc(var(--hdr-h) + var(--toolbar-h) + 8px);background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;z-index:60;min-width:200px;box-shadow:0 8px 32px rgba(0,0,0,.3);display:none;}
+.col-panel.open{display:block;}
+.col-panel-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-dim);margin-bottom:10px;}
+.col-check-row{display:flex;align-items:center;gap:7px;padding:3px 0;font-size:11px;cursor:pointer;color:var(--text);}
+.col-check-row input[type=checkbox]{accent-color:var(--sap-blue);cursor:pointer;}
+
+/* ── GITHUB SYNC ── */
+.gh-status{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--text-dim);padding:0 12px;border-left:1px solid var(--sep);}
+.gh-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.gh-dot.ok{background:#27ae60;box-shadow:0 0 6px #27ae60;}
+.gh-dot.warn{background:#f5a623;box-shadow:0 0 6px #f5a623;}
+.gh-dot.err{background:#e74c3c;box-shadow:0 0 6px #e74c3c;}
+.gh-dot.off{background:var(--text-dim);}
+.gh-dot.spin{background:var(--sap-blue);animation:ghspin 1s linear infinite;}
+@keyframes ghspin{0%{opacity:1;}50%{opacity:.3;}100%{opacity:1;}}
+.gh-label{color:#fff;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.gh-cfg-modal{max-width:520px;}
+.gh-cfg-modal .modal-body{grid-template-columns:1fr;}
+.gh-conflict-box{background:rgba(231,76,60,.08);border:1px solid rgba(231,76,60,.3);border-radius:10px;padding:18px;margin-bottom:14px;}
+.gh-conflict-title{font-family:var(--font-head);font-size:13px;font-weight:700;color:var(--sap-red);margin-bottom:6px;}
+.gh-conflict-msg{font-size:11px;color:var(--text-dim);line-height:1.6;margin-bottom:14px;}
+.gh-conflict-actions{display:flex;gap:8px;}
+.gh-history{font-size:10px;color:var(--text-dim);background:var(--inset);border-radius:6px;padding:8px 10px;margin-top:10px;font-family:monospace;line-height:1.8;}
+.gh-history span{color:var(--sap-teal);}
+.token-input-wrap{position:relative;}
+.token-toggle{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--text-dim);font-size:13px;}
+.gh-help{font-size:10px;color:var(--text-dim);margin-top:5px;line-height:1.5;}
+.gh-help a{color:var(--sap-teal);text-decoration:none;}
+.unsaved-badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:700;background:rgba(245,166,35,.15);border:1px solid rgba(245,166,35,.3);color:var(--sap-gold);padding:2px 7px;border-radius:10px;margin-left:6px;}
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo-area">
+    <div class="sap-badge">SAP</div>
+    <div>
+      <div class="logo-title">RICEFW — Matriz de Requerimientos</div>
+      <div class="logo-sub">Gestión · Seguimiento · Exportación</div>
+    </div>
+  </div>
+  <div class="hdr-actions">
+    <!-- GitHub status indicator -->
+    <div class="gh-status" id="ghStatus" onclick="openGhConfig()" style="cursor:pointer;" title="Configuración GitHub">
+      <div class="gh-dot off" id="ghDot"></div>
+      <span class="gh-label" id="ghLabel">GitHub: no configurado</span>
+    </div>
+    <button class="hbtn hbtn-teal" onclick="ghSync()" id="btnSync" title="Leer desde GitHub" style="display:none;">🔄 Sincronizar</button>
+    <button class="hbtn hbtn-blue" onclick="ghPublish()" id="btnPublish" title="Guardar en GitHub" style="display:none;">☁️ Publicar<span class="unsaved-badge" id="unsavedBadge" style="display:none;">● cambios</span></button>
+    <div class="hdr-sep"></div>
+    <button class="hbtn hbtn-ghost" onclick="toggleTheme()" id="themeBtn">☀️ Claro</button>
+    <div class="hdr-sep"></div>
+    <button class="hbtn hbtn-teal" onclick="openNew()">＋ Nuevo Req.</button>
+    <div class="hdr-sep"></div>
+    <button class="hbtn hbtn-green" onclick="importJSON()">⬆ JSON Local</button>
+    <input type="file" id="jsonInput" accept=".json" style="display:none" onchange="handleImport(this)">
+    <button class="hbtn hbtn-gold" onclick="exportJSON()">⬇ JSON Local</button>
+    <button class="hbtn hbtn-blue" onclick="exportEstimador()">📊 → Estimador</button>
+    <div class="hdr-sep"></div>
+    <button class="hbtn hbtn-ghost" onclick="openGhConfig()" title="Configurar GitHub">⚙ GitHub</button>
+    <button class="hbtn hbtn-ghost" onclick="toggleColPanel()" title="Columnas visibles">⊞ Cols</button>
+  </div>
+</header>
+
+<!-- KPI BAR -->
+<div class="kpi-bar" id="kpiBar">
+  <div class="kpi-item"><div class="kpi-val" id="kpi-total" style="color:var(--sap-blue)">0</div><div class="kpi-lbl">Total Reqs</div></div>
+  <div class="kpi-item"><div class="kpi-val" id="kpi-nuevo" style="color:var(--sap-teal)">0</div><div class="kpi-lbl">Nuevos</div></div>
+  <div class="kpi-item"><div class="kpi-val" id="kpi-dev" style="color:var(--sap-gold)">0</div><div class="kpi-lbl">En Desarrollo</div></div>
+  <div class="kpi-item"><div class="kpi-val" id="kpi-pruebas" style="color:var(--sap-purple)">0</div><div class="kpi-lbl">En Pruebas</div></div>
+  <div class="kpi-item"><div class="kpi-val" id="kpi-hecho" style="color:var(--sap-green)">0</div><div class="kpi-lbl">Hecho</div></div>
+  <div class="kpi-item"><div class="kpi-val" id="kpi-cancelado" style="color:#7f8c8d">0</div><div class="kpi-lbl">Cancelados</div></div>
+  <div class="kpi-item"><div class="kpi-val" id="kpi-dias" style="color:var(--sap-gold)">0</div><div class="kpi-lbl">Días Est. Total</div></div>
+  <div class="kpi-item"><div class="kpi-val" id="kpi-avance" style="color:var(--sap-teal)">0%</div><div class="kpi-lbl">Avance Prom.</div></div>
+</div>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Buscar por ID, título, módulo..." oninput="renderTable()">
+  </div>
+  <select class="filter-select" id="fModulo" onchange="renderTable()">
+    <option value="">Todos los módulos</option>
+  </select>
+  <select class="filter-select" id="fRicefw" onchange="renderTable()">
+    <option value="">Tipo RICEFW</option>
+    <option>R</option><option>I</option><option>C</option>
+    <option>E</option><option>F</option><option>W</option>
+    <option>P</option><option>CI</option>
+  </select>
+  <select class="filter-select" id="fStatus" onchange="renderTable()">
+    <option value="">Todos los status</option>
+    <option>Nuevo</option><option>En Desarrollo</option><option>En Pruebas</option>
+    <option>Listo</option><option>Hecho</option><option>Cancelado</option><option>No Iniciado</option>
+  </select>
+  <select class="filter-select" id="fComplejidad" onchange="renderTable()">
+    <option value="">Complejidad</option>
+    <option>Alta</option><option>Media</option><option>Baja</option>
+  </select>
+  <select class="filter-select" id="fSprint" onchange="renderTable()">
+    <option value="">Sprint</option>
+  </select>
+  <div class="toolbar-sep"></div>
+  <div class="stats-pill">Mostrando <span id="countShown">0</span> de <span id="countTotal">0</span></div>
+  <button class="hbtn hbtn-ghost" style="font-size:10px;padding:4px 10px;" onclick="clearFilters()">✕ Limpiar</button>
+</div>
+
+<!-- COLUMN VISIBILITY PANEL -->
+<div class="col-panel" id="colPanel">
+  <div class="col-panel-title">Columnas visibles</div>
+  <div id="colCheckboxes"></div>
+</div>
+
+<!-- TABLE CONTAINER -->
+<div class="table-container" id="tableContainer">
+  <table id="mainTable">
+    <thead id="tableHead"></thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
+
+<!-- FAB -->
+<button class="fab" onclick="openNew()" title="Nuevo requerimiento">＋</button>
+
+<!-- MODAL: ADD / EDIT -->
+<div class="modal-overlay" id="reqModal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-icon">📋</div>
+      <div class="modal-title" id="modalTitle">Nuevo Requerimiento</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn-primary" onclick="saveReq()">💾 Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: CONFIRM DELETE -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="confirm-box">
+    <div class="confirm-title">⚠️ Eliminar Requerimiento</div>
+    <div class="confirm-msg" id="confirmMsg">¿Estás seguro de eliminar este requerimiento? Esta acción no se puede deshacer.</div>
+    <div class="confirm-actions">
+      <button class="btn-cancel" onclick="closeConfirm()">Cancelar</button>
+      <button class="btn-danger" onclick="confirmDelete()">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- MODAL: GITHUB CONFIG -->
+<div class="modal-overlay" id="ghConfigModal">
+  <div class="modal-box gh-cfg-modal">
+    <div class="modal-header">
+      <div class="modal-icon">🐙</div>
+      <div class="modal-title">Configuración GitHub</div>
+      <button class="modal-close" onclick="closeGhConfig()">✕</button>
+    </div>
+    <div class="modal-body single" style="gap:12px;">
+      <div class="field-group">
+        <label class="field-label">Token Personal de Acceso (PAT) <span class="req">*</span></label>
+        <div class="token-input-wrap">
+          <input type="password" class="field-input" id="gh_token" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+          <button class="token-toggle" onclick="toggleTokenVis()" title="Mostrar/ocultar">👁</button>
+        </div>
+        <div class="gh-help">
+          Genera tu token en <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a>
+          → "Generate new token (classic)" → scope: <strong>repo</strong>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="field-group">
+          <label class="field-label">Owner (usuario u organización) <span class="req">*</span></label>
+          <input type="text" class="field-input" id="gh_owner" placeholder="mi-usuario-github">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Repositorio <span class="req">*</span></label>
+          <input type="text" class="field-input" id="gh_repo" placeholder="ricefw-suite">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="field-group">
+          <label class="field-label">Rama</label>
+          <input type="text" class="field-input" id="gh_branch" placeholder="main" value="main">
+        </div>
+        <div class="field-group">
+          <label class="field-label">Ruta del archivo</label>
+          <input type="text" class="field-input" id="gh_path" placeholder="data/matrix.json" value="data/matrix.json">
+        </div>
+      </div>
+      <div class="gh-history" id="ghHistory" style="display:none;">
+        <div style="font-family:var(--font-head);font-size:9px;letter-spacing:.8px;color:var(--text-dim);margin-bottom:4px;">ÚLTIMO COMMIT EN EL REPO</div>
+        <div id="ghHistoryContent"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="clearGhConfig()" style="margin-right:auto;">🗑 Limpiar</button>
+      <button class="btn-cancel" onclick="closeGhConfig()">Cancelar</button>
+      <button class="btn-primary" onclick="testAndSaveGhConfig()">🔗 Conectar y Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: CONFLICT -->
+<div class="modal-overlay" id="ghConflictModal">
+  <div class="modal-box" style="max-width:480px;">
+    <div class="modal-header">
+      <div class="modal-icon">⚡</div>
+      <div class="modal-title">Conflicto detectado</div>
+    </div>
+    <div class="modal-body single">
+      <div class="gh-conflict-box">
+        <div class="gh-conflict-title">⚠️ Alguien más publicó cambios</div>
+        <div class="gh-conflict-msg" id="conflictMsg">
+          El archivo en GitHub fue modificado desde tu última sincronización.
+          Si publicas ahora sobrescribirás los cambios del otro usuario.
+        </div>
+        <div class="gh-conflict-actions">
+          <button class="btn-cancel" onclick="closeConflict()">Cancelar</button>
+          <button class="btn-primary" onclick="ghSync();closeConflict()">🔄 Sincronizar primero</button>
+          <button class="btn-danger" onclick="ghForcePublish();closeConflict()">⚠️ Sobrescribir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════
+//  DATA MODEL
+// ══════════════════════════════════════════════════════
+const RICEFW_TYPES = ['R','I','C','E','F','W','P','CI'];
+const RICEFW_NAMES = {R:'Report',I:'Interface',C:'Conversion',E:'Enhancement',F:'Form',W:'Workflow',P:'Programa',CI:'Carga Inicial'};
+const COMPLEJIDADES = ['Alta','Media','Baja'];
+const STATUS_REQ = ['Nuevo','En Desarrollo','En Pruebas','Listo','Hecho','Cancelado','No Iniciado','Desestimado'];
+const STATUS_ABAP = ['No Iniciado','En Desarrollo','En Pruebas','PI','Listo','Hecho','Desestimado'];
+const PRIORIDADES = ['1','2','3','4','5'];
+const CONDICIONES = ['E = Especificación','A = Acelerador','F = Falta Especificar','N = No Aplica','X = Otros'];
+const TIPOS_REQ = ['Req. SD','Req. FI','Req. MM','Req. CO','Req. PP','Req. PM','Req. CS','Req. Integracion ABAP','Req. Integracion PI','Req. de Consultores Internos','Req. Usuario'];
+const RESPONSABLES = ['No Asignado','Abap 1','Abap 2','N/A'];
+const MODULOS_SAP = ['FI','CO','MM','SD','PP','PM','CS','HCM','WM','QM','TR','PS','BTP','GRC','OTRO'];
+
+let reqs = [];
+let editingId = null;
+let deleteId = null;
+let sortCol = 'id';
+let sortDir = 1;
+let nextId = 1;
+
+// Column definitions
+const COLUMNS = [
+  {key:'actions',    label:'',             visible:true,  sortable:false, fixed:true},
+  {key:'id',         label:'ID',           visible:true,  sortable:true},
+  {key:'modulo',     label:'Módulo',       visible:true,  sortable:true},
+  {key:'submodulo',  label:'Sub-módulo',   visible:false, sortable:true},
+  {key:'proceso',    label:'Proceso',      visible:false, sortable:true},
+  {key:'ricefw',     label:'RICEFW',       visible:true,  sortable:true},
+  {key:'titulo',     label:'Título',       visible:true,  sortable:true},
+  {key:'descripcion',label:'Descripción',  visible:true,  sortable:false},
+  {key:'tipo_req',   label:'Tipo Req.',    visible:false, sortable:true},
+  {key:'complejidad',label:'Complejidad',  visible:true,  sortable:true},
+  {key:'status',     label:'Status',       visible:true,  sortable:true},
+  {key:'prioridad',  label:'Prioridad',    visible:true,  sortable:true},
+  {key:'sprint',     label:'Sprint',       visible:true,  sortable:true},
+  {key:'responsable',label:'Responsable',  visible:true,  sortable:true},
+  {key:'status_abap',label:'Status ABAP',  visible:true,  sortable:true},
+  {key:'status_func',label:'Status Func.', visible:true,  sortable:true},
+  {key:'avance',     label:'% Avance',     visible:true,  sortable:true},
+  {key:'dias_est',   label:'Días Est.',    visible:true,  sortable:true},
+  {key:'dias_real',  label:'Días Real',    visible:false, sortable:true},
+  {key:'desvio',     label:'Desvío',       visible:true,  sortable:true},
+  {key:'fecha_inicio',label:'F. Inicio',   visible:false, sortable:true},
+  {key:'fecha_entrega',label:'F. Entrega', visible:true,  sortable:true},
+  {key:'condicion',  label:'Condición',    visible:false, sortable:true},
+  {key:'hecho',      label:'Hecho',        visible:true,  sortable:true},
+  {key:'notas',      label:'Notas',        visible:true,  sortable:false},
+];
+
+// ══════════════════════════════════════════════════════
+//  THEME
+// ══════════════════════════════════════════════════════
+function toggleTheme(){
+  const html=document.documentElement;
+  const next=html.getAttribute('data-theme')==='dark'?'light':'dark';
+  html.setAttribute('data-theme',next);
+  document.getElementById('themeBtn').textContent=next==='light'?'🌙 Oscuro':'☀️ Claro';
+  localStorage.setItem('matrix_theme',next);
+}
+
+// ══════════════════════════════════════════════════════
+//  ID GENERATION
+// ══════════════════════════════════════════════════════
+function genId(modulo){
+  const prefix = modulo||'REQ';
+  const existing = reqs.filter(r=>r.id.startsWith(prefix+'-')).map(r=>parseInt(r.id.split('-')[1]||0));
+  const max = existing.length ? Math.max(...existing) : 0;
+  return `${prefix}-${String(max+1).padStart(3,'0')}`;
+}
+
+// ══════════════════════════════════════════════════════
+//  RENDER TABLE
+// ══════════════════════════════════════════════════════
+function getVisible(){ return COLUMNS.filter(c=>c.visible); }
+
+function renderHead(){
+  const vis = getVisible();
+  document.getElementById('tableHead').innerHTML =
+    '<tr>'+vis.map(c=>{
+      let cls = '';
+      if(c.sortable && sortCol===c.key) cls = sortDir===1?' sorted-asc':' sorted-desc';
+      return `<th class="${cls}" onclick="${c.sortable?`setSort('${c.key}')`:''}" style="${c.key==='actions'?'width:80px;text-align:center;':''}">${c.label}</th>`;
+    }).join('')+'</tr>';
+}
+
+function setSort(key){
+  if(sortCol===key) sortDir*=-1; else{sortCol=key;sortDir=1;}
+  renderTable();
+}
+
+function filteredReqs(){
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const fMod = document.getElementById('fModulo').value;
+  const fR = document.getElementById('fRicefw').value;
+  const fS = document.getElementById('fStatus').value;
+  const fC = document.getElementById('fComplejidad').value;
+  const fSp = document.getElementById('fSprint').value;
+  return reqs.filter(r=>{
+    if(q && !['id','titulo','descripcion','modulo','responsable','notas'].some(k=>String(r[k]||'').toLowerCase().includes(q))) return false;
+    if(fMod && r.modulo!==fMod) return false;
+    if(fR && r.ricefw!==fR) return false;
+    if(fS && r.status!==fS) return false;
+    if(fC && r.complejidad!==fC) return false;
+    if(fSp && String(r.sprint)!==fSp) return false;
+    return true;
+  }).sort((a,b)=>{
+    let av=a[sortCol]||'', bv=b[sortCol]||'';
+    if(!isNaN(av)&&!isNaN(bv)){av=Number(av);bv=Number(bv);}
+    if(av<bv)return -sortDir; if(av>bv)return sortDir; return 0;
+  });
+}
+
+function ricefwBadge(v){
+  if(!v) return '<span style="color:var(--text-dim);font-size:10px;">—</span>';
+  const k=v.split('=')[0].trim().toUpperCase();
+  const cls=RICEFW_TYPES.includes(k)?`badge-${k}`:'';
+  return `<span class="badge ${cls}">${k}</span>`;
+}
+function statusBadge(v){
+  if(!v) return '—';
+  const map={'Nuevo':'nuevo','En Desarrollo':'en-desarrollo','En Pruebas':'en-pruebas','Listo':'listo','Hecho':'hecho','Cancelado':'cancelado','No Iniciado':'no-iniciado','Desestimado':'cancelado','PI':'pi'};
+  const k=Object.keys(map).find(s=>v.toLowerCase().includes(s.toLowerCase()))||'';
+  return `<span class="badge badge-${map[k]||'no-iniciado'}">${v}</span>`;
+}
+function compBadge(v){
+  if(!v||v==='N/A') return '—';
+  const m={Alta:'alta',Media:'media',Baja:'baja'};
+  return `<span class="badge badge-${m[v]||''}">${v}</span>`;
+}
+function progBar(pct){
+  const p=Math.min(100,Math.max(0,Number(pct)||0));
+  const col=p>=80?'var(--sap-green)':p>=40?'var(--sap-gold)':'var(--sap-blue)';
+  return `<div class="prog-bar"><div class="prog-track"><div class="prog-fill" style="width:${p}%;background:${col};"></div></div><div class="prog-label">${p}%</div></div>`;
+}
+function desvio(est,real){
+  const e=Number(est)||0, r=Number(real)||0;
+  if(!e&&!r) return '—';
+  if(!r) return '—';
+  const d=r-e;
+  if(d===0) return '<span class="desvio ok">0d</span>';
+  return `<span class="desvio ${d>0?'pos':'neg'}">${d>0?'+':''}${d}d</span>`;
+}
+
+function cellValue(col, r){
+  switch(col.key){
+    case 'actions': return `<div class="row-actions">
+      <button class="act-btn" onclick="event.stopPropagation();openEdit('${r._uid}')" title="Editar">✏️</button>
+      <button class="act-btn danger" onclick="event.stopPropagation();confirmDel('${r._uid}')" title="Eliminar">🗑️</button>
+    </div>`;
+    case 'id': return `<span style="font-family:var(--font-head);font-size:11px;color:var(--sap-blue);font-weight:700;">${r.id||'—'}</span>`;
+    case 'ricefw': return ricefwBadge(r.ricefw);
+    case 'complejidad': return compBadge(r.complejidad);
+    case 'status': return statusBadge(r.status);
+    case 'status_abap': return statusBadge(r.status_abap);
+    case 'status_func': return statusBadge(r.status_func);
+    case 'avance': return progBar(r.avance);
+    case 'desvio': return desvio(r.dias_est, r.dias_real);
+    case 'hecho': return r.hecho==='Si'?'<span class="badge badge-hecho">✓ Sí</span>':'<span class="badge badge-no-iniciado">No</span>';
+    case 'prioridad': return r.prioridad?`<span style="font-family:var(--font-head);font-weight:700;color:${r.prioridad<=2?'var(--sap-red)':r.prioridad<=3?'var(--sap-gold)':'var(--text-dim)'};">${r.prioridad}</span>`:'—';
+    default: return r[col.key]!=null&&r[col.key]!==''?String(r[col.key]):'<span style="color:var(--text-dim);opacity:.4;">—</span>';
+  }
+}
+
+function renderTable(){
+  renderHead();
+  const vis = getVisible();
+  const data = filteredReqs();
+  document.getElementById('countShown').textContent=data.length;
+  document.getElementById('countTotal').textContent=reqs.length;
+  if(!data.length){
+    document.getElementById('tableBody').innerHTML=
+      `<tr><td colspan="${vis.length}" style="padding:0;">
+        <div class="empty-state"><div class="icon">📋</div>
+        <div class="msg">Sin requerimientos</div>
+        <div class="sub">${reqs.length?'Ajusta los filtros de búsqueda':'Crea el primer requerimiento con el botón ＋'}</div>
+        </div></td></tr>`;
+  } else {
+    document.getElementById('tableBody').innerHTML = data.map(r=>
+      `<tr onclick="openEdit('${r._uid}')">
+        ${vis.map(c=>`<td class="col-${c.key}" title="${c.key!=='actions'&&c.key!=='avance'&&c.key!=='desvio'&&c.key!=='hecho'?String(r[c.key]||''):''}">${cellValue(c,r)}</td>`).join('')}
+      </tr>`
+    ).join('');
+  }
+  updateKPIs(data);
+}
+
+function updateKPIs(data){
+  const all = reqs;
+  document.getElementById('kpi-total').textContent=all.length;
+  document.getElementById('kpi-nuevo').textContent=all.filter(r=>r.status==='Nuevo').length;
+  document.getElementById('kpi-dev').textContent=all.filter(r=>r.status==='En Desarrollo').length;
+  document.getElementById('kpi-pruebas').textContent=all.filter(r=>r.status==='En Pruebas').length;
+  document.getElementById('kpi-hecho').textContent=all.filter(r=>r.status==='Hecho').length;
+  document.getElementById('kpi-cancelado').textContent=all.filter(r=>['Cancelado','Desestimado'].includes(r.status)).length;
+  const dias=all.reduce((s,r)=>s+(Number(r.dias_est)||0),0);
+  document.getElementById('kpi-dias').textContent=dias;
+  const avg=all.length?Math.round(all.reduce((s,r)=>s+(Number(r.avance)||0),0)/all.length):0;
+  document.getElementById('kpi-avance').textContent=avg+'%';
+}
+
+// ══════════════════════════════════════════════════════
+//  MODAL FORM
+// ══════════════════════════════════════════════════════
+function fieldHtml(key,label,type,value,options,required,hint){
+  const req = required?'<span class="req">*</span>':'';
+  const hintHtml = hint?`<span style="font-size:9px;color:var(--text-dim);margin-left:5px;">${hint}</span>`:'';
+  if(type==='select'){
+    const opts=options.map(o=>`<option ${o===value?'selected':''}>${o}</option>`).join('');
+    return `<div class="field-group"><label class="field-label">${label}${req}${hintHtml}</label>
+      <select class="field-select" id="f_${key}"><option value=""></option>${opts}</select></div>`;
+  }
+  if(type==='textarea'){
+    return `<div class="field-group full-row"><label class="field-label">${label}${req}${hintHtml}</label>
+      <textarea class="field-textarea" id="f_${key}" rows="3">${value||''}</textarea></div>`;
+  }
+  if(type==='number'){
+    return `<div class="field-group"><label class="field-label">${label}${req}${hintHtml}</label>
+      <input type="number" class="field-input" id="f_${key}" value="${value||''}" min="0" max="${key==='avance'?100:9999}"></div>`;
+  }
+  if(type==='date'){
+    return `<div class="field-group"><label class="field-label">${label}${req}${hintHtml}</label>
+      <input type="date" class="field-input" id="f_${key}" value="${value||''}"></div>`;
+  }
+  return `<div class="field-group"><label class="field-label">${label}${req}${hintHtml}</label>
+    <input type="text" class="field-input" id="f_${key}" value="${value||''}" placeholder="${hint||''}"></div>`;
+}
+
+function buildForm(r){
+  r = r||{};
+  return `
+    ${fieldHtml('id','ID del Requerimiento','text',r.id,'','true','Ej: FI-001')}
+    ${fieldHtml('modulo','Módulo SAP','select',r.modulo,MODULOS_SAP,true)}
+    ${fieldHtml('submodulo','Sub-módulo','text',r.submodulo,'',false,'Ej: FIN-FSCM-CR')}
+    ${fieldHtml('proceso','Proceso','text',r.proceso,'',false,'')}
+    ${fieldHtml('ricefw','Tipo RICEFW','select',r.ricefw?r.ricefw.split('=')[0].trim():'',[...RICEFW_TYPES.map(k=>`${k} = ${RICEFW_NAMES[k]}`)],true)}
+    ${fieldHtml('complejidad','Complejidad','select',r.complejidad,COMPLEJIDADES,true)}
+    ${fieldHtml('titulo','Título del Requerimiento','text',r.titulo,'',true,'')}
+    ${fieldHtml('descripcion','Descripción','textarea',r.descripcion,'',false,'')}
+    ${fieldHtml('tipo_req','Tipo de Requerimiento','select',r.tipo_req,TIPOS_REQ,false)}
+    ${fieldHtml('status','Status del Requerimiento','select',r.status,STATUS_REQ,true)}
+    ${fieldHtml('prioridad','Prioridad','select',r.prioridad,PRIORIDADES,false)}
+    ${fieldHtml('sprint','Sprint','number',r.sprint,'',false,'')}
+    ${fieldHtml('responsable','Responsable ABAP','select',r.responsable,RESPONSABLES,false)}
+    ${fieldHtml('status_abap','Status ABAP','select',r.status_abap,STATUS_ABAP,false)}
+    ${fieldHtml('status_func','Status Doc. Funcional','select',r.status_func,STATUS_ABAP,false)}
+    ${fieldHtml('avance','% Avance ABAP','number',r.avance,'',false,'0-100')}
+    ${fieldHtml('dias_est','Días Estimados','number',r.dias_est,'',false,'')}
+    ${fieldHtml('dias_real','Días Reales (Actual)','number',r.dias_real,'',false,'Se calcula el desvío')}
+    ${fieldHtml('fecha_inicio','Fecha de Inicio','date',r.fecha_inicio,'',false,'')}
+    ${fieldHtml('fecha_entrega','Fecha de Entrega','date',r.fecha_entrega,'',false,'')}
+    ${fieldHtml('hecho','Hecho','select',r.hecho,['Si','No'],false)}
+    ${fieldHtml('condicion','Condición','select',r.condicion,CONDICIONES,false)}
+    ${fieldHtml('notas','Notas / Consideraciones','textarea',r.notas,'',false,'')}
+  `;
+}
+
+function openNew(){
+  editingId=null;
+  document.getElementById('modalTitle').textContent='➕ Nuevo Requerimiento';
+  document.getElementById('modalBody').innerHTML=buildForm();
+  document.getElementById('reqModal').classList.add('open');
+  // Auto-fill ID if module selected
+  document.getElementById('f_modulo').addEventListener('change',function(){
+    const idField=document.getElementById('f_id');
+    if(!idField.value) idField.value=genId(this.value);
+  });
+}
+
+function openEdit(uid){
+  const r=reqs.find(x=>x._uid===uid);
+  if(!r)return;
+  editingId=uid;
+  document.getElementById('modalTitle').textContent='✏️ Editar Requerimiento — '+r.id;
+  document.getElementById('modalBody').innerHTML=buildForm(r);
+  document.getElementById('reqModal').classList.add('open');
+}
+
+function closeModal(){
+  document.getElementById('reqModal').classList.remove('open');
+  editingId=null;
+}
+
+function saveReq(){
+  const get=id=>{const el=document.getElementById(id);return el?el.value.trim():''};
+  const r={
+    _uid: editingId||('uid_'+Date.now()+'_'+Math.random().toString(36).slice(2)),
+    id:        get('f_id')||genId(get('f_modulo')),
+    modulo:    get('f_modulo'),
+    submodulo: get('f_submodulo'),
+    proceso:   get('f_proceso'),
+    ricefw:    get('f_ricefw'),
+    complejidad:get('f_complejidad'),
+    titulo:    get('f_titulo'),
+    descripcion:get('f_descripcion'),
+    tipo_req:  get('f_tipo_req'),
+    status:    get('f_status')||'Nuevo',
+    prioridad: get('f_prioridad'),
+    sprint:    get('f_sprint'),
+    responsable:get('f_responsable')||'No Asignado',
+    status_abap:get('f_status_abap')||'No Iniciado',
+    status_func:get('f_status_func')||'No Iniciado',
+    avance:    get('f_avance')||'0',
+    dias_est:  get('f_dias_est')||'0',
+    dias_real: get('f_dias_real')||'0',
+    fecha_inicio:get('f_fecha_inicio'),
+    fecha_entrega:get('f_fecha_entrega'),
+    hecho:     get('f_hecho')||'No',
+    condicion: get('f_condicion'),
+    notas:     get('f_notas'),
+  };
+  if(!r.modulo){showToast('⚠️ El módulo es obligatorio');return;}
+  if(!r.titulo){showToast('⚠️ El título es obligatorio');return;}
+  if(editingId){
+    const idx=reqs.findIndex(x=>x._uid===editingId);
+    if(idx>-1) reqs[idx]=r;
+    showToast('✅ Requerimiento actualizado');
+  } else {
+    reqs.push(r);
+    showToast('✅ Requerimiento creado: '+r.id);
+  }
+  closeModal();
+  updateFilters();
+  renderTable();
+  saveLocal();
+  if(isGhConfigured()) markUnsaved();
+}
+
+// ══════════════════════════════════════════════════════
+//  DELETE
+// ══════════════════════════════════════════════════════
+function confirmDel(uid){
+  deleteId=uid;
+  const r=reqs.find(x=>x._uid===uid);
+  document.getElementById('confirmMsg').textContent=`¿Eliminar "${r?.titulo||r?.id}"? Esta acción no se puede deshacer.`;
+  document.getElementById('confirmModal').classList.add('open');
+}
+function closeConfirm(){document.getElementById('confirmModal').classList.remove('open');deleteId=null;}
+function confirmDelete(){
+  if(!deleteId)return;
+  reqs=reqs.filter(r=>r._uid!==deleteId);
+  closeConfirm();
+  updateFilters();
+  renderTable();
+  saveLocal();
+  if(isGhConfigured()) markUnsaved();
+  showToast('🗑️ Requerimiento eliminado');
+}
+
+// ══════════════════════════════════════════════════════
+//  FILTERS
+// ══════════════════════════════════════════════════════
+function updateFilters(){
+  const mods=[...new Set(reqs.map(r=>r.modulo).filter(Boolean))].sort();
+  const fMod=document.getElementById('fModulo');
+  const cur=fMod.value;
+  fMod.innerHTML='<option value="">Todos los módulos</option>'+mods.map(m=>`<option ${m===cur?'selected':''}>${m}</option>`).join('');
+  const sprints=[...new Set(reqs.map(r=>r.sprint).filter(v=>v!==''&&v!=null))].sort((a,b)=>Number(a)-Number(b));
+  const fSp=document.getElementById('fSprint');
+  const curSp=fSp.value;
+  fSp.innerHTML='<option value="">Sprint</option>'+sprints.map(s=>`<option ${String(s)===curSp?'selected':''}>${s}</option>`).join('');
+}
+
+function clearFilters(){
+  ['searchInput','fModulo','fRicefw','fStatus','fComplejidad','fSprint'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.value='';
+  });
+  renderTable();
+}
+
+// ══════════════════════════════════════════════════════
+//  COLUMN VISIBILITY
+// ══════════════════════════════════════════════════════
+function buildColPanel(){
+  const el=document.getElementById('colCheckboxes');
+  el.innerHTML=COLUMNS.filter(c=>!c.fixed).map(c=>`
+    <label class="col-check-row">
+      <input type="checkbox" ${c.visible?'checked':''} onchange="toggleCol('${c.key}',this.checked)">
+      ${c.label||c.key}
+    </label>`).join('');
+}
+function toggleCol(key,val){
+  const c=COLUMNS.find(x=>x.key===key);
+  if(c) c.visible=val;
+  renderTable();
+}
+function toggleColPanel(){
+  const p=document.getElementById('colPanel');
+  p.classList.toggle('open');
+  if(p.classList.contains('open')) buildColPanel();
+}
+document.addEventListener('click',e=>{
+  const p=document.getElementById('colPanel');
+  if(!p.contains(e.target)&&!e.target.closest('[onclick="toggleColPanel()"]')) p.classList.remove('open');
+});
+
+// ══════════════════════════════════════════════════════
+//  JSON EXPORT / IMPORT
+// ══════════════════════════════════════════════════════
+async function exportJSON(){
+  const payload={
+    _app:'SAP RICEFW Matrix',_version:'1.0',
+    exportedAt:new Date().toISOString(),
+    reqs:reqs.map(r=>{const{_uid,...rest}=r;return rest;})
+  };
+  const json=JSON.stringify(payload,null,2);
+  const blob=new Blob([json],{type:'application/json'});
+  const name=`RICEFW_Matriz_${new Date().toISOString().slice(0,10)}.json`;
+  if(window.showSaveFilePicker){
+    try{
+      const h=await window.showSaveFilePicker({suggestedName:name,types:[{description:'JSON',accept:{'application/json':['.json']}}]});
+      const w=await h.createWritable();await w.write(blob);await w.close();
+      showToast('✅ JSON guardado correctamente');return;
+    }catch(e){if(e.name==='AbortError')return;}
+  }
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=name;a.click();URL.revokeObjectURL(url);
+  showToast('⬇ JSON descargado en Descargas');
+}
+
+function importJSON(){document.getElementById('jsonInput').value='';document.getElementById('jsonInput').click();}
+function handleImport(inp){
+  const file=inp.files[0];if(!file)return;
+  const r=new FileReader();
+  r.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      let imported=[];
+      if(Array.isArray(data)) imported=data;
+      else if(data.reqs) imported=data.reqs;
+      else{showToast('❌ Formato JSON inválido');return;}
+      if(!confirm(`¿Reemplazar todos los datos con ${imported.length} requerimientos del archivo?\n"${file.name}"`)) return;
+      reqs=imported.map((r,i)=>({...r,_uid:'uid_'+Date.now()+'_'+i}));
+      updateFilters();renderTable();saveLocal();
+      showToast(`✅ Importados ${reqs.length} requerimientos`);
+    }catch(err){showToast('❌ Error al parsear JSON: '+err.message);}
+  };
+  r.readAsText(file);
+}
+
+// Export format compatible with Estimador de Desarrollo
+async function exportEstimador(){
+  if(!reqs.length){showToast('⚠️ No hay requerimientos para exportar');return;}
+  // Build the estimador JSON format: group by modulo + ricefw + complejidad
+  const modules={};
+  const ricefwKeys={R:'R',I:'I',C:'C',E:'E',F:'F',W:'W',P:'R',CI:'C'};// map P→R, CI→C
+  reqs.filter(r=>r.modulo&&r.ricefw&&r.complejidad).forEach(r=>{
+    const mod=r.modulo;
+    if(!modules[mod]) modules[mod]={id:Object.keys(modules).length+1,key:mod,name:`${mod} — ${mod}`,reqs:{R:{baja:0,media:0,alta:0},I:{baja:0,media:0,alta:0},C:{baja:0,media:0,alta:0},E:{baja:0,media:0,alta:0},F:{baja:0,media:0,alta:0},W:{baja:0,media:0,alta:0}},progress:0,note:''};
+    const rk=ricefwKeys[r.ricefw.split('=')[0].trim().toUpperCase()]||'R';
+    const ck={Alta:'alta',Media:'media',Baja:'baja'}[r.complejidad]||'baja';
+    modules[mod].reqs[rk][ck]++;
+  });
+  const payload={
+    _version:'ricefw-v2',_app:'SAP RICEFW Estimador',
+    savedAt:new Date().toISOString(),
+    modules:Object.values(modules),
+    moduleCounter:Object.keys(modules).length,
+    HRS:{R:{baja:16,media:32,alta:60},I:{baja:24,media:48,alta:80},C:{baja:20,media:40,alta:70},E:{baja:12,media:28,alta:50},F:{baja:10,media:20,alta:40},W:{baja:16,media:32,alta:55}},
+    params:{horasdia:'8',diasemana:'5',disponibilidad:'0.8',nRecursos:'3',costoHora:'35',fechaInicio:new Date().toISOString().slice(0,10)},
+  };
+  const json=JSON.stringify(payload,null,2);
+  const blob=new Blob([json],{type:'application/json'});
+  const name=`RICEFW_Estimador_${new Date().toISOString().slice(0,10)}.json`;
+  if(window.showSaveFilePicker){
+    try{
+      const h=await window.showSaveFilePicker({suggestedName:name,types:[{description:'JSON Estimador',accept:{'application/json':['.json']}}]});
+      const w=await h.createWritable();await w.write(blob);await w.close();
+      showToast('📊 JSON para Estimador guardado');return;
+    }catch(e){if(e.name==='AbortError')return;}
+  }
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=name;a.click();URL.revokeObjectURL(url);
+  showToast('📊 JSON para Estimador descargado');
+}
+
+// ══════════════════════════════════════════════════════
+//  LOCAL STORAGE
+// ══════════════════════════════════════════════════════
+function saveLocal(){localStorage.setItem('ricefw_matrix',JSON.stringify(reqs));}
+function loadLocal(){
+  try{
+    const d=localStorage.getItem('ricefw_matrix');
+    if(d){reqs=JSON.parse(d).map((r,i)=>({...r,_uid:r._uid||'uid_'+Date.now()+'_'+i}));}
+  }catch(e){}
+}
+
+// ══════════════════════════════════════════════════════
+//  TOAST
+// ══════════════════════════════════════════════════════
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.style.opacity='1';
+  clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2800);
+}
+
+// ══════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════
+function init(){
+  const saved=localStorage.getItem('matrix_theme');
+  if(saved){document.documentElement.setAttribute('data-theme',saved);document.getElementById('themeBtn').textContent=saved==='light'?'🌙 Oscuro':'☀️ Claro';}
+  loadLocal();
+  // Seed demo data if empty
+  if(!reqs.length){
+    reqs=[
+      {_uid:'uid_demo_1',id:'FI-001',modulo:'FI',submodulo:'FIN-AP',proceso:'Pagos',ricefw:'I = Interface',complejidad:'Media',titulo:'Interface pago a proveedores',descripcion:'Envío de órdenes de pago desde SAP a banco externo vía REST.',tipo_req:'Req. FI',status:'En Desarrollo',prioridad:'2',sprint:'1',responsable:'Abap 1',status_abap:'En Desarrollo',status_func:'Finalizado',avance:'45',dias_est:'8',dias_real:'5',fecha_inicio:'2026-02-01',fecha_entrega:'2026-02-15',hecho:'No',condicion:'E = Especificación',notas:'Validar certificados SSL del banco'},
+      {_uid:'uid_demo_2',id:'FI-002',modulo:'FI',submodulo:'FIN-GL',proceso:'Reportes',ricefw:'R = Report',complejidad:'Baja',titulo:'Reporte saldos contables',descripcion:'ALV con saldos por cuenta mayor y centro de costo.',tipo_req:'Req. FI',status:'Hecho',prioridad:'3',sprint:'1',responsable:'Abap 2',status_abap:'Hecho',status_func:'Finalizado',avance:'100',dias_est:'3',dias_real:'3',fecha_inicio:'2026-01-15',fecha_entrega:'2026-01-20',hecho:'Si',condicion:'N = No Aplica',notas:''},
+      {_uid:'uid_demo_3',id:'SD-001',modulo:'SD',submodulo:'SD-OTC',proceso:'Ventas',ricefw:'E = Enhancement',complejidad:'Alta',titulo:'BADI validación crédito en pedido',descripcion:'Enhancement que valida límite de crédito en grabación de pedido de venta y bloquea si supera el límite aprobado.',tipo_req:'Req. SD',status:'En Pruebas',prioridad:'1',sprint:'2',responsable:'Abap 1',status_abap:'En Pruebas',status_func:'Finalizado',avance:'80',dias_est:'12',dias_real:'14',fecha_inicio:'2026-02-10',fecha_entrega:'2026-03-01',hecho:'No',condicion:'E = Especificación',notas:'Revisar escenario con pedidos bloqueados'},
+      {_uid:'uid_demo_4',id:'MM-001',modulo:'MM',submodulo:'MM-IM',proceso:'Inventario',ricefw:'C = Conversión',complejidad:'Alta',titulo:'Carga inicial materiales',descripcion:'Migración de 200,000 registros de materiales desde sistema legacy ERP anterior.',tipo_req:'Req. Integracion ABAP',status:'Nuevo',prioridad:'1',sprint:'3',responsable:'No Asignado',status_abap:'No Iniciado',status_func:'No Iniciado',avance:'0',dias_est:'20',dias_real:'0',fecha_inicio:'',fecha_entrega:'2026-04-15',hecho:'No',condicion:'F = Falta Especificar',notas:'Pendiente mapeo de campos legacy'},
+      {_uid:'uid_demo_5',id:'SD-002',modulo:'SD',submodulo:'SD-OUT',proceso:'Documentos de salida',ricefw:'F = Forma',complejidad:'Media',titulo:'Smartform factura cliente',descripcion:'Formulario de factura con logo, tabla de posiciones, totales, condiciones de pago y código QR.',tipo_req:'Req. SD',status:'Listo',prioridad:'2',sprint:'1',responsable:'Abap 2',status_abap:'Listo',status_func:'Finalizado',avance:'95',dias_est:'7',dias_real:'8',fecha_inicio:'2026-01-20',fecha_entrega:'2026-02-05',hecho:'No',condicion:'A = Acelerador',notas:'Pendiente aprobación cliente sobre diseño final'},
+    ];
+    saveLocal();
+  }
+  updateFilters();
+  renderTable();
+}
+
+init();
+
+
+// ══════════════════════════════════════════════════════
+//  GITHUB INTEGRATION
+// ══════════════════════════════════════════════════════
+
+// Config stored in localStorage (never in the repo)
+let ghCfg = {};
+let ghSha = null;       // SHA of the file currently in GitHub (for conflict detection)
+let hasUnsaved = false; // Local changes not yet published
+
+function loadGhCfg(){
+  try{ ghCfg = JSON.parse(localStorage.getItem('ricefw_gh_cfg')||'{}'); }catch(e){ ghCfg={}; }
+  ghSha = localStorage.getItem('ricefw_gh_sha')||null;
+}
+
+function saveGhCfg(){
+  localStorage.setItem('ricefw_gh_cfg', JSON.stringify(ghCfg));
+}
+
+function ghApiUrl(){
+  return `https://api.github.com/repos/${ghCfg.owner}/${ghCfg.repo}/contents/${ghCfg.path||'data/matrix.json'}`;
+}
+
+function ghHeaders(){
+  return {
+    'Authorization': `token ${ghCfg.token}`,
+    'Accept': 'application/vnd.github.v3+json',
+    'Content-Type': 'application/json',
+  };
+}
+
+function isGhConfigured(){
+  return !!(ghCfg.token && ghCfg.owner && ghCfg.repo);
+}
+
+// ── STATUS INDICATOR ──────────────────────────────────
+function setGhStatus(state, label){
+  const dot = document.getElementById('ghDot');
+  const lbl = document.getElementById('ghLabel');
+  const btnSync = document.getElementById('btnSync');
+  const btnPub  = document.getElementById('btnPublish');
+  if(!dot||!lbl) return;
+  dot.className = 'gh-dot ' + state;
+  lbl.textContent = label;
+  const configured = isGhConfigured();
+  btnSync.style.display  = configured ? '' : 'none';
+  btnPub.style.display   = configured ? '' : 'none';
+}
+
+function markUnsaved(){
+  hasUnsaved = true;
+  const b = document.getElementById('unsavedBadge');
+  if(b) b.style.display = '';
+}
+
+function markSaved(){
+  hasUnsaved = false;
+  const b = document.getElementById('unsavedBadge');
+  if(b) b.style.display = 'none';
+}
+
+// ── CONFIG MODAL ─────────────────────────────────────
+function openGhConfig(){
+  loadGhCfg();
+  document.getElementById('gh_token').value  = ghCfg.token  || '';
+  document.getElementById('gh_owner').value  = ghCfg.owner  || '';
+  document.getElementById('gh_repo').value   = ghCfg.repo   || '';
+  document.getElementById('gh_branch').value = ghCfg.branch || 'main';
+  document.getElementById('gh_path').value   = ghCfg.path   || 'data/matrix.json';
+  document.getElementById('ghHistory').style.display = 'none';
+  document.getElementById('ghConfigModal').classList.add('open');
+}
+
+function closeGhConfig(){ document.getElementById('ghConfigModal').classList.remove('open'); }
+
+function toggleTokenVis(){
+  const inp = document.getElementById('gh_token');
+  inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+function clearGhConfig(){
+  if(!confirm('¿Eliminar la configuración de GitHub de este navegador?')) return;
+  localStorage.removeItem('ricefw_gh_cfg');
+  localStorage.removeItem('ricefw_gh_sha');
+  ghCfg = {}; ghSha = null;
+  setGhStatus('off', 'GitHub: no configurado');
+  closeGhConfig();
+  showToast('🗑 Configuración GitHub eliminada');
+}
+
+async function testAndSaveGhConfig(){
+  const token  = document.getElementById('gh_token').value.trim();
+  const owner  = document.getElementById('gh_owner').value.trim();
+  const repo   = document.getElementById('gh_repo').value.trim();
+  const branch = document.getElementById('gh_branch').value.trim() || 'main';
+  const path   = document.getElementById('gh_path').value.trim()   || 'data/matrix.json';
+
+  if(!token||!owner||!repo){ showToast('⚠️ Token, Owner y Repo son obligatorios'); return; }
+
+  setGhStatus('spin', 'Conectando...');
+  try{
+    const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`,
+      { headers:{ 'Authorization':`token ${token}`, 'Accept':'application/vnd.github.v3+json' } });
+
+    if(res.status===401){ setGhStatus('err','Token inválido'); showToast('❌ Token inválido o expirado'); return; }
+    if(res.status===404){
+      // File doesn't exist yet — repo exists but file missing: that's OK, we'll create it
+      const repoCheck = await fetch(`https://api.github.com/repos/${owner}/${repo}`,
+        { headers:{ 'Authorization':`token ${token}`, 'Accept':'application/vnd.github.v3+json' } });
+      if(!repoCheck.ok){ setGhStatus('err','Repo no encontrado'); showToast(`❌ Repositorio "${owner}/${repo}" no encontrado`); return; }
+      // Repo OK, file will be created on first publish
+      ghCfg = {token,owner,repo,branch,path};
+      saveGhCfg(); ghSha = null;
+      localStorage.removeItem('ricefw_gh_sha');
+      setGhStatus('warn', `${owner}/${repo} — archivo no existe aún`);
+      showToast('⚠️ Repo OK pero archivo no existe. Usa "☁️ Publicar" para crearlo.');
+      showLastCommit(null);
+      closeGhConfig(); return;
+    }
+    if(!res.ok){ setGhStatus('err','Error '+res.status); showToast('❌ Error al conectar: HTTP '+res.status); return; }
+
+    const data = await res.json();
+    ghCfg = {token,owner,repo,branch,path};
+    saveGhCfg();
+    ghSha = data.sha;
+    localStorage.setItem('ricefw_gh_sha', ghSha);
+    setGhStatus('ok', `${owner}/${repo}`);
+
+    // Show last commit info
+    showLastCommit(data);
+    showToast(`✅ Conectado a ${owner}/${repo}`);
+    // Auto-load data from repo
+    if(confirm(`Conexión exitosa con ${owner}/${repo}.
+¿Sincronizar ahora y cargar los datos del repositorio?`)){
+      closeGhConfig();
+      await ghSync();
+    } else {
+      closeGhConfig();
+    }
+  }catch(err){
+    setGhStatus('err','Error de red');
+    showToast('❌ Error de red: '+err.message);
+  }
+}
+
+async function showLastCommit(data){
+  const el = document.getElementById('ghHistoryContent');
+  const wrap = document.getElementById('ghHistory');
+  if(!data){ wrap.style.display='none'; return; }
+  wrap.style.display = '';
+  // Get last commit for this file
+  try{
+    const res = await fetch(
+      `https://api.github.com/repos/${ghCfg.owner}/${ghCfg.repo}/commits?path=${ghCfg.path}&per_page=1`,
+      { headers: ghHeaders() });
+    if(res.ok){
+      const commits = await res.json();
+      if(commits.length){
+        const c = commits[0];
+        const date = new Date(c.commit.author.date).toLocaleString('es-PA');
+        el.innerHTML = `<span>${c.commit.author.name}</span> · ${date}<br>"${c.commit.message}"`;
+      }
+    }
+  }catch(e){ el.textContent = 'No se pudo obtener historial'; }
+}
+
+// ── SYNC (read from GitHub) ───────────────────────────
+async function ghSync(){
+  if(!isGhConfigured()){ showToast('⚠️ Configura GitHub primero'); openGhConfig(); return; }
+  setGhStatus('spin', 'Sincronizando...');
+  try{
+    const res = await fetch(`${ghApiUrl()}?ref=${ghCfg.branch}&_=${Date.now()}`, { headers: ghHeaders() });
+    if(!res.ok){ setGhStatus('err','Error '+res.status); showToast('❌ Error al leer: HTTP '+res.status); return; }
+    const data = await res.json();
+    const content = JSON.parse(atob(data.content.replace(/\n/g,'')));
+    ghSha = data.sha;
+    localStorage.setItem('ricefw_gh_sha', ghSha);
+
+    const incoming = Array.isArray(content) ? content : (content.reqs||[]);
+    reqs = incoming.map((r,i)=>({...r, _uid: r._uid||'uid_'+Date.now()+'_'+i}));
+    saveLocal(); markSaved();
+    updateFilters(); renderTable();
+    setGhStatus('ok', `${ghCfg.owner}/${ghCfg.repo}`);
+    showToast(`🔄 Sincronizado · ${reqs.length} requerimientos cargados`);
+  }catch(err){
+    setGhStatus('err', 'Error al sincronizar');
+    showToast('❌ Error al sincronizar: '+err.message);
+  }
+}
+
+// ── PUBLISH (write to GitHub) ─────────────────────────
+async function ghPublish(){
+  if(!isGhConfigured()){ showToast('⚠️ Configura GitHub primero'); openGhConfig(); return; }
+
+  // Conflict check: compare current remote SHA with what we last read
+  setGhStatus('spin', 'Verificando...');
+  try{
+    const check = await fetch(`${ghApiUrl()}?ref=${ghCfg.branch}&_=${Date.now()}`, { headers: ghHeaders() });
+    if(check.ok){
+      const remote = await check.json();
+      if(ghSha && remote.sha !== ghSha){
+        // Conflict!
+        const rc = await fetch(
+          `https://api.github.com/repos/${ghCfg.owner}/${ghCfg.repo}/commits?path=${ghCfg.path}&per_page=1`,
+          { headers: ghHeaders() });
+        let who = 'otro usuario';
+        if(rc.ok){ const commits=await rc.json(); if(commits.length) who=commits[0].commit.author.name; }
+        document.getElementById('conflictMsg').innerHTML =
+          `El archivo en GitHub fue modificado por <strong>${who}</strong> desde tu última sincronización.<br><br>
+           Si publicas ahora sobrescribirás sus cambios. Considera sincronizar primero para no perder trabajo del equipo.`;
+        document.getElementById('ghConflictModal').classList.add('open');
+        setGhStatus('warn', `${ghCfg.owner}/${ghCfg.repo}`);
+        return;
+      }
+      // No conflict — update our SHA reference
+      if(check.ok) ghSha = remote.sha;
+    }
+    await doPublish();
+  }catch(err){
+    setGhStatus('err', 'Error');
+    showToast('❌ Error al publicar: '+err.message);
+  }
+}
+
+async function ghForcePublish(){
+  // Reload SHA from remote first then push
+  try{
+    const res = await fetch(`${ghApiUrl()}?ref=${ghCfg.branch}&_=${Date.now()}`, { headers: ghHeaders() });
+    if(res.ok){ const d=await res.json(); ghSha=d.sha; }
+  }catch(e){}
+  await doPublish();
+}
+
+async function doPublish(){
+  setGhStatus('spin', 'Publicando...');
+  try{
+    const payload = {
+      _app:'SAP RICEFW Matrix', _version:'1.0',
+      publishedAt: new Date().toISOString(),
+      publishedBy: ghCfg.owner,
+      reqs: reqs.map(r=>{ const{_uid,...rest}=r; return rest; })
+    };
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
+    const now = new Date().toLocaleString('es-PA');
+    const body = {
+      message: `[RICEFW Matrix] Actualización ${now} · ${reqs.length} requerimientos`,
+      content,
+      branch: ghCfg.branch,
+    };
+    // Only include SHA if file already exists (for update vs create)
+    if(ghSha) body.sha = ghSha;
+
+    const res = await fetch(ghApiUrl(), {
+      method: 'PUT',
+      headers: ghHeaders(),
+      body: JSON.stringify(body),
+    });
+
+    if(!res.ok){
+      const err = await res.json();
+      throw new Error(err.message || 'HTTP '+res.status);
+    }
+    const result = await res.json();
+    ghSha = result.content.sha;
+    localStorage.setItem('ricefw_gh_sha', ghSha);
+    markSaved();
+    setGhStatus('ok', `${ghCfg.owner}/${ghCfg.repo}`);
+    showToast(`☁️ Publicado en GitHub · ${reqs.length} requerimientos`);
+  }catch(err){
+    setGhStatus('err', 'Error al publicar');
+    showToast('❌ Error al publicar: '+err.message);
+  }
+}
+
+function closeConflict(){ document.getElementById('ghConflictModal').classList.remove('open'); }
+
+// ── PATCH saveLocal to also mark unsaved ─────────────
+const _origSaveLocal = saveLocal;
+// Override saveReq to mark unsaved after every local save
+
+// ── INIT GITHUB ───────────────────────────────────────
+(function initGitHub(){
+  loadGhCfg();
+  if(isGhConfigured()){
+    ghSha = localStorage.getItem('ricefw_gh_sha') || null;
+    setGhStatus('ok', `${ghCfg.owner}/${ghCfg.repo}`);
+  } else {
+    setGhStatus('off', 'GitHub: no configurado');
+  }
+})();
+</script>
+</body>
+</html>
